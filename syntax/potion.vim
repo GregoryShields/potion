@@ -6,8 +6,6 @@ if exists("b:current_syntax")
 endif
 
 
-" echom "Our syntax highlighting code will go here."
-
 " See :h syn-keyword :h group-name
 " It's possible to define multiple keywords on a single line, such that
 " you could group related keywords. However, defining only one Potion
@@ -79,6 +77,7 @@ highlight link potionComment Comment
 highlight link potionOperator Operator
 
 highlight link potionString String
+
 
 let b:current_syntax = "potion"
 

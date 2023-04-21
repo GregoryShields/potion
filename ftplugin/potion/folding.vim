@@ -1,9 +1,20 @@
+" Let's use expression folding instead...
+setlocal foldmethod=expr
+
+" Define the expression used to figure out the foldlevel of a line...
+setlocal foldexpr=GetPotionFoldLevel(v:lnum)
+
 echom 'Fold Levels:'
 
 function! GetPotionFoldLevel(lnum)
 	let lineText = 'Line ' . a:lnum . ' ='
 
 	" If the line is blank, return -1.
+	" This is dumb, Losh. Just return 0!
+	" Actually that won't work, because what if we have blank lines in the
+	" middle of an indented section?
+	" Well, okay. Maybe return 0 for blank lines where the indent level of the
+	" next line is not greater than 1?
 	if getline(a:lnum) =~? '\v^\s*$' " See NOTE 1
 		"echom 'line ' . a:lnum . ' = -1'
 		echom lineText '-1 blank'
@@ -63,12 +74,6 @@ function! NextNonBlankLine(lnum)
 	return -2 " Arbitrary error code that's easy to spot visually.
 endfunction
 
-" Define the expression used to figure out the foldlevel of a line...
-setlocal foldexpr=GetPotionFoldLevel(v:lnum)
-
-" Let's use expression folding instead...
-setlocal foldmethod=expr
-
 
 " NOTE 1
 " Match lines containing nothing or whitespace only (blank lines):
@@ -102,11 +107,12 @@ setlocal foldmethod=expr
 " Returning the indentation of the next line prepended with '>' gives
 " us something like this...
 " >1
-" This is another one of Vim's "special" foldlevels. See :h fold-expr
+" See :h fold-expr
+" This is another one of Vim's "special" foldlevels.
 " It tells Vim that "a fold with this level starts at this line".
 " Remember, this is effectively saying something like...
 " :setlocal foldexpr=>1
-" ...i.e., a fold with the level of 1 starts at this line, even though
+" ...i.e., "a fold with this level (1) starts at this line", even though
 " this line itself only has an indentation level of 0.
 " 
 "
